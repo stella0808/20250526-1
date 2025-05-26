@@ -38,16 +38,9 @@ function draw() {
   // 手部關鍵點與手勢判斷
   let gesture = "";
   if (handPredictions.length > 0) {
-    for (let i = 0; i < handPredictions.length; i++) {
-      const hand = handPredictions[i];
-      for (let j = 0; j < hand.landmarks.length; j++) {
-        const [x, y, z] = hand.landmarks[j];
-        fill(0, 255, 0);
-        noStroke();
-        ellipse(width - x, y, 10, 10); // 鏡像x
-      }
-      gesture = detectGesture(hand.landmarks);
-    }
+    // 只取第一隻手進行手勢判斷
+    const hand = handPredictions[0];
+    gesture = detectGesture(hand.landmarks);
   }
 
   // 臉部關鍵點（根據手勢決定圓圈位置）
@@ -66,7 +59,7 @@ function draw() {
     noFill();
     stroke(255, 0, 0);
     strokeWeight(4);
-    ellipse(width - x, y, 100, 100); // 鏡像x0, 100); // 鏡像x
+    ellipse(width - x, y, 100, 100); // 鏡像x
   }
 
   // 顯示手勢結果

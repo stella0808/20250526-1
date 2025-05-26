@@ -35,10 +35,11 @@ function handModelReady() {
 function draw() {
   image(video, 0, 0, width, height);
 
-  // 手部關鍵點與手勢判斷
+  // 預設 gesture 為空字串
   let gesture = "";
+
+  // 只取第一隻手進行手勢判斷
   if (handPredictions.length > 0) {
-    // 只取第一隻手進行手勢判斷
     const hand = handPredictions[0];
     gesture = detectGesture(hand.landmarks);
   }
@@ -49,9 +50,9 @@ function draw() {
     let x, y;
     if (gesture === "剪刀") {
       [x, y] = keypoints[10]; // 額頭
-    } else if (gesture === "石頭") {
-      [x, y] = keypoints[33]; // 左眼睛
     } else if (gesture === "布") {
+      [x, y] = keypoints[33]; // 左眼睛
+    } else if (gesture === "石頭") {
       [x, y] = keypoints[263]; // 右眼睛
     } else {
       [x, y] = keypoints[94]; // 鼻子
@@ -59,17 +60,10 @@ function draw() {
     noFill();
     stroke(255, 0, 0);
     strokeWeight(4);
-
-     ellipse(width - x, y, 10, 10);
+    ellipse(x, y, 100, 100); // 不鏡像
   }
 
-  // 顯示手勢結果
-  fill(0, 0, 0, 180);
-  rect(10, 10, 120, 40, 10);
-  fill(255);
-  textSize(24);
-  textAlign(LEFT, TOP);
-  text("手勢: " + gesture, 20, 20);
+  
 }
 
 // 手勢判斷函式

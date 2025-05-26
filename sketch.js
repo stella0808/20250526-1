@@ -44,7 +44,7 @@ function draw() {
         const [x, y, z] = hand.landmarks[j];
         fill(0, 255, 0);
         noStroke();
-        ellipse(x, y, 10, 10);
+        ellipse(width - x, y, 10, 10); // 鏡像x
       }
       gesture = detectGesture(hand.landmarks);
     }
@@ -66,7 +66,7 @@ function draw() {
     noFill();
     stroke(255, 0, 0);
     strokeWeight(4);
-    ellipse(x, y, 100, 100);
+    ellipse(width - x, y, 100, 100); // 鏡像x0, 100); // 鏡像x
   }
 
   // 顯示手勢結果

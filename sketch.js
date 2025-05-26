@@ -52,13 +52,17 @@ function draw() {
       idx = 263;
     }
     // 防呆：確認該點存在
-    if (keypoints[idx]) {
+    if (keypoints[idx] && keypoints[idx][0] && keypoints[idx][1]) {
       const [x, y] = keypoints[idx];
       noFill();
-      stroke(255, 0, 0);
-      strokeWeight(4);
+      stroke(0, 255, 0); // 改成綠色更明顯
+      strokeWeight(8);   // 線條加粗
       ellipse(x, y, 100, 100);
+    } else {
+      console.log("找不到臉部關鍵點", idx, keypoints[idx]);
     }
+  } else {
+    console.log("沒有偵測到臉");
   }
 }
 

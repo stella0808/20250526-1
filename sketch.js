@@ -4,6 +4,13 @@ let handpose;
 let facePredictions = [];
 let handPredictions = [];
 let circlePos = null;
+let img1, img2, img3; // 新增變數儲存圖片
+
+function preload() {
+  img1 = loadImage('1.png'); // 剪刀
+  img2 = loadImage('2.png'); // 石頭
+  img3 = loadImage('3.png'); // 布
+}
 
 function setup() {
   createCanvas(640, 480).position(
@@ -33,20 +40,38 @@ function draw() {
 
     // 預設圓圈在鼻子（168）
     let idx = 168;
+    let showImg = false;
+    let imgToShow = null;
 
     // 如果有偵測到手，判斷手勢
     if (handPredictions.length > 0) {
       const gesture = detectGesture(handPredictions[0]);
-      if (gesture === 'scissors') idx = 10;    // 額頭
-      else if (gesture === 'paper') idx = 33;  // 左眼
-      else if (gesture === 'rock') idx = 263;  // 右眼
+      if (gesture === 'scissors') {
+        idx = 10;    // 額頭
+        showImg = true;
+        imgToShow = img1;
+      } else if (gesture === 'paper') {
+        idx = 33;  // 左眼
+        showImg = true;
+        imgToShow = img3;
+      } else if (gesture === 'rock') {
+        idx = 263;  // 右眼
+        showImg = true;
+        imgToShow = img2;
+      }
     }
 
     const [x, y] = keypoints[idx];
-    noFill();
-    stroke(255, 0, 0);
-    strokeWeight(4);
-    ellipse(x, y, 100, 100);
+    if (showImg && imgToShow) {
+      imageMode(CENTER);
+      image(imgToShow, x, y, 100, 100); // 顯示對應圖片
+      imageMode(CORNER);
+    } else {
+      noFill();
+      stroke(255, 0, 0);
+      strokeWeight(4);
+      ellipse(x, y, 100, 100);
+    }
   }
 }
 

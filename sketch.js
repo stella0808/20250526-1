@@ -38,8 +38,18 @@ function draw() {
   if (facePredictions.length > 0) {
     const keypoints = facePredictions[0].scaledMesh;
 
-    // 預設圓圈在鼻子（168）
-    let idx = 168;
+    // 取得臉部外框的幾個關鍵點
+    const left = keypoints[234];
+    const right = keypoints[454];
+    const top = keypoints[10];
+    const bottom = keypoints[152];
+
+    // 臉部中心與寬高
+    const faceCenterX = (left[0] + right[0]) / 2;
+    const faceCenterY = (top[1] + bottom[1]) / 2;
+    const faceWidth = dist(left[0], left[1], right[0], right[1]);
+    const faceHeight = dist(top[0], top[1], bottom[0], bottom[1]);
+
     let showImg = false;
     let imgToShow = null;
 
@@ -47,26 +57,24 @@ function draw() {
     if (handPredictions.length > 0) {
       const gesture = detectGesture(handPredictions[0]);
       if (gesture === 'scissors') {
-        idx = 10;    // 額頭
         showImg = true;
         imgToShow = img1;
       } else if (gesture === 'paper') {
-        idx = 33;  // 左眼
         showImg = true;
         imgToShow = img3;
       } else if (gesture === 'rock') {
-        idx = 263;  // 右眼
         showImg = true;
         imgToShow = img2;
       }
     }
 
-    const [x, y] = keypoints[idx];
     if (showImg && imgToShow) {
       imageMode(CENTER);
-      image(imgToShow, x, y, 100, 100); // 顯示對應圖片
+      image(imgToShow, faceCenterX, faceCenterY, faceWidth * 1.2, faceHeight * 1.2); // 套用到整臉
       imageMode(CORNER);
     } else {
+      // 預設圓圈在鼻子（168）
+      const [x, y] = keypoints[168];
       noFill();
       stroke(255, 0, 0);
       strokeWeight(4);

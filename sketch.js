@@ -35,35 +35,31 @@ function handModelReady() {
 function draw() {
   image(video, 0, 0, width, height);
 
-  // 預設 gesture 為空字串
   let gesture = "";
-
-  // 只取第一隻手進行手勢判斷
   if (handPredictions.length > 0) {
     const hand = handPredictions[0];
     gesture = detectGesture(hand.landmarks);
   }
 
-  // 臉部關鍵點（根據手勢決定圓圈位置）
   if (predictions.length > 0) {
     const keypoints = predictions[0].scaledMesh;
-    let x, y;
+    let idx = 94; // 預設鼻子
     if (gesture === "剪刀") {
-      [x, y] = keypoints[10]; // 額頭
+      idx = 10;
     } else if (gesture === "布") {
-      [x, y] = keypoints[33]; // 左眼睛
+      idx = 33;
     } else if (gesture === "石頭") {
-      [x, y] = keypoints[263]; // 右眼睛
-    } else {
-      [x, y] = keypoints[94]; // 鼻子
+      idx = 263;
     }
-    noFill();
-    stroke(255, 0, 0);
-    strokeWeight(4);
-    ellipse(x, y, 100, 100); // 不鏡像
+    // 防呆：確認該點存在
+    if (keypoints[idx]) {
+      const [x, y] = keypoints[idx];
+      noFill();
+      stroke(255, 0, 0);
+      strokeWeight(4);
+      ellipse(x, y, 100, 100);
+    }
   }
-
-  
 }
 
 // 手勢判斷函式

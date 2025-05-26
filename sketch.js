@@ -59,7 +59,8 @@ function draw() {
     noFill();
     stroke(255, 0, 0);
     strokeWeight(4);
-    ellipse(width - x, y, 100, 100); // 鏡像x
+    // 不要有這種
+    // ellipse(width - x, y, 10, 10);
   }
 
   // 顯示手勢結果
